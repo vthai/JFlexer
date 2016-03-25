@@ -24,7 +24,9 @@ non terminal expr, class_expr, int_assign_expr, str_assign_expr;
 non terminal eof;
 non terminal class_content;
 non terminal access_modifier;
-
+non terminal array_initializer;
+non terminal variable_initialization_list;
+non terminal variable_initializer;
 
 
 class_expr ::= access_modifier CLASS IDENTIFIER LBRACE class_content RBRACE;
@@ -37,6 +39,16 @@ class_content ::= int_assign_expr class_content
                   | str_assign_expr class_content
                   | /* empty */
                   ;
-
+variable_initializer ::= expr
+						| array_initializer
+						;
+                 
+variable_initialization_list ::= variable_initializer LBRACE COMMA variable_initializer RBRACE;
+			
+array_initializer ::= LBRACK RBRACK
+					| LBRACK COMMA RBRACK
+					| LBRACK variable_initialization_list RBRACK
+					;
+  					
 int_assign_expr ::= INT IDENTIFIER EQ INTEGER_LITERAL SEMICOLON;
 str_assign_expr ::= IDENTIFIER IDENTIFIER EQ STRING_LITERAL SEMICOLON;
