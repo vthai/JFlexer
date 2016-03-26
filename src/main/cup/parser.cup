@@ -19,26 +19,25 @@ terminal 	INTEGER_LITERAL, STRING_LITERAL;
 terminal 	LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, DOT;
 terminal 	UNKNOWN;
 
-    
-non terminal expr, class_expr, int_assign_expr, str_assign_expr;
-non terminal eof;
-non terminal class_content;
-non terminal access_modifier;
+
+non terminal Expression, AssignmentExpression, Assignment, AssignmentOperator;
+non terminal LeftHandSide, ExpressionName;
+/*non terminal UnannClassType, UnannClassOrInterfaceType;*/
 
 
+Expression ::= AssignmentExpression;
 
+AssignmentExpression ::= Assignment;
 
+LeftHandSide ::= ExpressionName;
 
-class_expr ::= access_modifier CLASS IDENTIFIER LBRACE class_content RBRACE;
+ExpressionName ::= IDENTIFIER;
 
-access_modifier ::= PUBLIC
-                  | /* empty */
-                  ;
+AssignmentOperator ::= EQ;
 
-class_content ::= int_assign_expr class_content
-                  | str_assign_expr class_content
-                  | /* empty */
-                  ;
+Assignment ::= IDENTIFIER;
 
-int_assign_expr ::= INT IDENTIFIER EQ INTEGER_LITERAL SEMICOLON;
-str_assign_expr ::= IDENTIFIER IDENTIFIER EQ STRING_LITERAL SEMICOLON;
+/*UnannClassOrInterfaceType ::= UnannClassType;
+
+UnannClassType ::= IDENTIFIER;*/
+
