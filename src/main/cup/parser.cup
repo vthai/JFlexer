@@ -27,6 +27,8 @@ non terminal access_modifier;
 
 
 
+
+
 class_expr ::= access_modifier CLASS IDENTIFIER LBRACE class_content RBRACE;
 
 access_modifier ::= PUBLIC
