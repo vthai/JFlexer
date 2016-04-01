@@ -42,7 +42,11 @@ CommentContent       = ( [^*] | \*+ [^/*] )*
 
 Identifier = [:jletter:] [:jletterdigit:]*
 
-DecIntegerLiteral = 0 | [1-9][0-9]*
+//DecIntegerLiteral = 0 | [1-9][0-9]*
+
+ZeroDigit = 0
+
+NonZeroDigit = [1-9]
 
 
 

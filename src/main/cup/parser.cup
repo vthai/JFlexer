@@ -154,7 +154,30 @@ IntegerLiteral              ::= DecimalIntegerLiteral;
 
 DecimalIntegerLiteral       ::= DecimalNumeral;
 
-DecimalNumeral              ::= INTEGER_LITERAL;
+DecimalNumeral              ::= NonZeroDigit
+							| Digits
+							;
+							
+Digits						::= Digit
+							| Digit Digit
+							;
+							
+Digit						::= 0
+							| NonZeroDigit
+							;
+							
+NonZeroDigit				::= 1
+							| 2
+							| 3
+							| 4
+							| 5
+							| 6
+							| 7
+							| 8
+							| 9
+							;
+							
+							
 
 /* Method body related grammar */
 
@@ -203,4 +226,6 @@ IntegralType                ::= INT
 FloatingPointType           ::= DOUBLE
                             | FLOAT
                             ;
+                            
+
 
