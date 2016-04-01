@@ -112,10 +112,17 @@ NonZeroDigit = [1-9]
   {Identifier}                   { return symbol(sym.IDENTIFIER); }
  
  
-/* literals */
-  {DecIntegerLiteral}            { return symbol(sym.INTEGER_LITERAL,new Integer(yytext())); }
-  \"                             { string.setLength(0); yybegin(STRING); }
+///* literals */
+//  {DecIntegerLiteral}            { return symbol(sym.INTEGER_LITERAL,new Integer(yytext())); }
+//  \"                             { string.setLength(0); yybegin(STRING); }
 
+/* non zero digits */
+  {NonZeroDigit}            	 { return symbol(sym.NON_ZERO_DIGIT,new Integer(yytext())); }
+  \"                             { string.setLength(0); yybegin(STRING); }
+  
+  /* zero digits */
+  {ZeroDigit}            		 { return symbol(sym.ZERO_DIGIT,new Integer(yytext())); }
+  \"                             { string.setLength(0); yybegin(STRING); }
 
 /* separators */
   "("                            { return symbol(sym.LPAREN); }
