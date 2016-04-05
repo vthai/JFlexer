@@ -1,6 +1,13 @@
 package org.ifn660.jflexer;
 
 import java_cup.runtime.*;
+import org.ifn660.jflexer.ast.*;
+
+parser code {:
+   protected Node root;
+   
+   void setRoot(Node node) { this.root = node; }
+:}
 
 /* Symbol lists
 These declarations name and supply an object type for each terminal and non-terminal symbol that appears in the grammar
@@ -31,7 +38,7 @@ terminal        LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA
 terminal        UNKNOWN;
 
 nonterminal      CompilationUnit, TypeDeclarations, TypeDeclaration, ClassDeclaration;
-nonterminal      NormalClassDeclaration, ClassModifiers, ClassModifier, ClassBody;
+nonterminal      Node NormalClassDeclaration, ClassModifiers, ClassModifier, ClassBody;
 nonterminal      FormalParameter,UnannType,UnannReferenceType;
 nonterminal      VariableDeclaratorList, VariableDeclarators, VariableDeclarator;
 nonterminal      VariableDeclaratorId, VariableInitializer;
@@ -73,7 +80,11 @@ TypeDeclaration             ::= ClassDeclaration;
 
 ClassDeclaration            ::= NormalClassDeclaration;
 
-NormalClassDeclaration      ::= ClassModifiers CLASS Identifier TypeParameters Superclasses Superinterfaces ClassBody;
+NormalClassDeclaration      ::= ClassModifiers:m CLASS Identifier:i TypeParameters Superclasses Superinterfaces ClassBody
+                                 {: 
+                                    Node node = new ClassNode(i, m);
+                                    parser.setRoot(node);
+                                 :};
 
 TypeParameters              ::= TypeParameter
                                | /* empty */
@@ -87,7 +98,11 @@ Superinterfaces             ::= Superinterface
                                | /* empty */
                                ;
 
-ClassModifiers              ::= ClassModifier ClassModifiers
+ClassModifiers              ::= ClassModifier:cm ClassModifiers:cms 
+                              {: 
+                                 RESULT = cms;
+                                 RESULT = sym.terminalNames[cm]; 
+                              :}
                             | /* empty */
                             ;
 
