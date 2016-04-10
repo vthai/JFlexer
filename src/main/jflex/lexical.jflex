@@ -14,16 +14,35 @@ import java_cup.runtime.*;
 %cup    // switches to CUP compatibility mode to interface with a CUP generated parser.
 %line   //switches line counting on (the current line number can be accessed via the variable yyline)
 %column //switches column counting on (the current column is accessed via yycolumn)
-%state STRING
+%state STRING, CHARLITERAL
 
 %{
-  StringBuffer string = new StringBuffer();
-
+  StringBuilder string = new StringBuilder();
+  
   private Symbol symbol(int type) {
-    return new Symbol(type, yyline, yycolumn);
+    return new JavaSymbol(type, yyline+1, yycolumn+1);
   }
+
   private Symbol symbol(int type, Object value) {
-    return new Symbol(type, yyline, yycolumn, value);
+    return new JavaSymbol(type, yyline+1, yycolumn+1, value);
+  }
+
+  /** 
+   * assumes correct representation of a long value for 
+   * specified radix in scanner buffer from <code>start</code> 
+   * to <code>end</code> 
+   */
+  private long parseLong(int start, int end, int radix) {
+    long result = 0;
+    long digit;
+
+    for (int i = start; i < end; i++) {
+      digit  = Character.digit(yycharat(i),radix);
+      result*= radix;
+      result+= digit;
+    }
+
+    return result;
   }
 %}
 
@@ -44,6 +63,8 @@ Identifier = [:jletter:] [:jletterdigit:]*
 
 DecIntegerLiteral = 0 | [1-9][0-9]*
 
+StringCharacter = [^\r\n\"\\]
+SingleCharacter = [^\r\n\'\\]
 
 
 %%
@@ -176,16 +197,42 @@ DecIntegerLiteral = 0 | [1-9][0-9]*
 
 
 <STRING> {
-  \"                             { yybegin(YYINITIAL); 
-                                   return symbol(sym.STRING_LITERAL, 
-                                   string.toString()); }
-  [^\n\r\"\\]+                   { string.append( yytext() ); }
-  \\t                            { string.append('\t'); }
-  \\n                            { string.append('\n'); }
-  \\r                            { string.append('\r'); }
-  \\\"                           { string.append('\"'); }
-  \\                             { string.append('\\'); }
-}
+  \"                             { yybegin(YYINITIAL); return symbol(STRING_LITERAL, string.toString()); }
+  
+  {StringCharacter}+             { string.append( yytext() ); }
+  
+  /* escape sequences */
+  "\\b"                          { string.append( '\b' ); }
+  "\\t"                          { string.append( '\t' ); }
+  "\\n"                          { string.append( '\n' ); }
+  "\\f"                          { string.append( '\f' ); }
+  "\\r"                          { string.append( '\r' ); }
+  "\\\""                         { string.append( '\"' ); }
+  "\\'"                          { string.append( '\'' ); }
+  "\\\\"                         { string.append( '\\' ); }
+  //\\[0-3]?{OctDigit}?{OctDigit}  { char val = (char) Integer.parseInt(yytext().substring(1),8);
+                        				   string.append( val ); }
+
+
+/* character literal */
+  \'                             { yybegin(CHARLITERAL); }
+  
+<CHARLITERAL> {
+  {SingleCharacter}\'            { yybegin(YYINITIAL); return symbol(CHARACTER_LITERAL, yytext().charAt(0)); }
+  
+  /* escape sequences */
+  "\\b"\'                        { yybegin(YYINITIAL); return symbol(CHARACTER_LITERAL, '\b');}
+  "\\t"\'                        { yybegin(YYINITIAL); return symbol(CHARACTER_LITERAL, '\t');}
+  "\\n"\'                        { yybegin(YYINITIAL); return symbol(CHARACTER_LITERAL, '\n');}
+  "\\f"\'                        { yybegin(YYINITIAL); return symbol(CHARACTER_LITERAL, '\f');}
+  "\\r"\'                        { yybegin(YYINITIAL); return symbol(CHARACTER_LITERAL, '\r');}
+  "\\\""\'                       { yybegin(YYINITIAL); return symbol(CHARACTER_LITERAL, '\"');}
+  "\\'"\'                        { yybegin(YYINITIAL); return symbol(CHARACTER_LITERAL, '\'');}
+  "\\\\"\'                       { yybegin(YYINITIAL); return symbol(CHARACTER_LITERAL, '\\'); }
+  //\\[0-3]?{OctDigit}?{OctDigit}\' { yybegin(YYINITIAL); 
+			                              int val = Integer.parseInt(yytext().substring(1,yylength()-1),8);
+			                            return symbol(CHARACTER_LITERAL, (char)val); }
+
 
 <<EOF>> {return symbol(sym.EOF);}
 /* error fallback */
