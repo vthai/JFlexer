@@ -3,3 +3,4 @@ public class Example {
         int x = 42;
     }
 }
+

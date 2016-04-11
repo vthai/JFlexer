@@ -52,6 +52,7 @@ nonterminal      ConditionalExpression, AssignmentExpression, Expression;
 nonterminal      PackageDelcaration_opt, PackageDelcaration, ImportDeclaration_opt, ImportDeclaration;
 nonterminal      TypeParameters_opt, TypeParameters, Superclass_opt, Superclass, Superinterfaces_opt, Superinterfaces;
 nonterminal      Throws_opt, Throws, VariableModifier_opt, VariableModifier, TypeArguments_opt, TypeArguments;
+nonterminal      Assignment,ReferenceType;
 nonterminal      PreIncrementExpression, PreDecrementExpression;
 nonterminal      ExpressionName, PostIncrementExpression, PostDecrementExpression, ArrayCreationExpression;
 nonterminal		 CastExpression;
@@ -163,16 +164,21 @@ TypeArguments_opt           ::= TypeArguments
 
 Expression                  ::= AssignmentExpression;
 
-AssignmentExpression        ::= ConditionalExpression;
+AssignmentExpression        ::= ConditionalExpression
+                            |Assignment;
 
 ConditionalExpression       ::= ConditionalOrExpression
                             | ConditionalOrExpression OP_LOGIC_OR ConditionalAndExpression;
 
 ConditionalOrExpression     ::= ConditionalAndExpression;
+                            
 
-ConditionalAndExpression    ::= InclusiveOrExpression;
+ConditionalAndExpression    ::= InclusiveOrExpression
+                            |ConditionalAndExpression OP_LOGIC_AND InclusiveOrExpression;
 
-InclusiveOrExpression       ::= ExclusiveOrExpression;
+InclusiveOrExpression       ::= ExclusiveOrExpression
+                            |InclusiveOrExpression OP_OR ExclusiveOrExpression;
+                            
 
 ExclusiveOrExpression       ::= AndExpression
 							| ExclusiveOrExpression OP_XOR AndExpression
@@ -185,7 +191,12 @@ EqualityExpression          ::= RelationalExpression
                             | EqualityExpression OP_EQ_EQ RelationalExpression
                             | EqualityExpression OP_NOT_EQ RelationalExpression;
 
-RelationalExpression        ::= ShiftExpression;
+RelationalExpression        ::= ShiftExpression
+                            |RelationalExpression OP_LT ShiftExpression 
+                            |RelationalExpression OP_GT ShiftExpression 
+                            |RelationalExpression OP_LT_EQ ShiftExpression 
+                            |RelationalExpression OP_GT_EQ ShiftExpression 
+                            |RelationalExpression INSTANCEOF ReferenceType;
 
 ShiftExpression             ::= AdditiveExpression
                             | ShiftExpression OP_BIT_L_SHIFT AdditiveExpression
@@ -197,7 +208,10 @@ AdditiveExpression          ::= MultiplicativeExpression
 							| AdditiveExpression OP_MINUS MultiplicativeExpression
 							;
 
-MultiplicativeExpression    ::= UnaryExpression;
+MultiplicativeExpression    ::= UnaryExpression
+                            |MultiplicativeExpression OP_MULTIPLY UnaryExpression 
+                            |MultiplicativeExpression OP_DIVIDE UnaryExpression 
+                            |MultiplicativeExpression OP_MODULUS UnaryExpression;
 
 UnaryExpression             ::= PreIncrementExpression
                             | PreDecrementExpression
