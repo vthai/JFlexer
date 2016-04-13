@@ -105,7 +105,7 @@ DecIntegerLiteral = 0 | [1-9][0-9]*
 <YYINITIAL> {
 
 /* identifiers */ 
-  {Identifier}                   { return symbol(sym.IDENTIFIER); }
+  {Identifier}                   { return symbol(sym.IDENTIFIER, new String(yytext())); }
  
  
 /* literals */

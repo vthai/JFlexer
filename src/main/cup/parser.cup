@@ -1,6 +1,13 @@
 package org.ifn660.jflexer;
 
 import java_cup.runtime.*;
+import org.ifn660.jflexer.ast.*;
+
+parser code 
+{:
+    public Node root;
+    
+:}
 
 /* Symbol lists
 These declarations name and supply an object type for each terminal and non-terminal symbol that appears in the grammar
@@ -30,31 +37,31 @@ terminal        INTEGER_LITERAL, STRING_LITERAL;
 terminal        LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, DOT;
 terminal        UNKNOWN;
 
-nonterminal      CompilationUnit, TypeDeclaration_opt, TypeDeclaration, ClassDeclaration;
-nonterminal      NormalClassDeclaration, ClassModifier_opt, ClassModifier, ClassBody;
-nonterminal      FormalParameter, UnannType, UnannReferenceType;
-nonterminal      VariableDeclaratorList, VariableDeclarator_opt, VariableDeclarator;
-nonterminal      VariableDeclaratorId, VariableInitializer_opt, VariableInitializer;
-nonterminal      UnannArrayType, UnannClassOrInterfaceType, UnannClassType, Dims_opt, Dims;
-nonterminal      ClassBodyDeclaration_opt, ClassBodyDeclaration, ClassMemberDeclaration, MethodDeclaration;
-nonterminal      MethodHeader, MethodBody, MethodModifier_opt, MethodModifier, Result, MethodDeclarator, FormalParameterList_opt, FormalParameterList, FormalParameters;
-nonterminal      Block, BlockStatements_opt, BlockStatements, BlockStatement_opt, BlockStatement;
-nonterminal      LocalVariableDeclarationStatement, LocalVariableDeclaration;
-nonterminal      UnnanType, UnnanPrimitiveType, UnnanReferenceType, NumericType, IntegralType, FloatingPointType;
-nonterminal      Identifier;
-nonterminal      LastFormalParameter;
-nonterminal      Literal;
-nonterminal      PrimaryNoNewArray, Primary, PostfixExpression, UnaryExpressionNotPlusMinus;
-nonterminal      UnaryExpression, MultiplicativeExpression, AdditiveExpression, ShiftExpression;
-nonterminal      RelationalExpression, EqualityExpression, AndExpression, ExclusiveOrExpression;
-nonterminal      InclusiveOrExpression, ConditionalAndExpression, ConditionalOrExpression;
-nonterminal      ConditionalExpression, AssignmentExpression, Expression;
-nonterminal      PackageDelcaration_opt, PackageDelcaration, ImportDeclaration_opt, ImportDeclaration;
-nonterminal      TypeParameters_opt, TypeParameters, Superclass_opt, Superclass, Superinterfaces_opt, Superinterfaces;
-nonterminal      Throws_opt, Throws, VariableModifier_opt, VariableModifier, TypeArguments_opt, TypeArguments;
-nonterminal      PreIncrementExpression, PreDecrementExpression;
-nonterminal      ExpressionName, PostIncrementExpression, PostDecrementExpression, ArrayCreationExpression;
-nonterminal		 CastExpression, AmbiguousName;
+nonterminal      Node CompilationUnit, TypeDeclaration_opt, TypeDeclaration, ClassDeclaration;
+nonterminal      Node NormalClassDeclaration, ClassModifier_opt, ClassModifier, ClassBody;
+nonterminal      Node FormalParameter, UnannType, UnannReferenceType;
+nonterminal      Node VariableDeclaratorList, VariableDeclarator_opt, VariableDeclarator;
+nonterminal      Node VariableDeclaratorId, VariableInitializer_opt, VariableInitializer;
+nonterminal      Node UnannArrayType, UnannClassOrInterfaceType, UnannClassType, Dims_opt, Dims;
+nonterminal      Node ClassBodyDeclaration_opt, ClassBodyDeclaration, ClassMemberDeclaration, MethodDeclaration;
+nonterminal      Node MethodHeader, MethodBody, MethodModifier_opt, MethodModifier, Result, MethodDeclarator, FormalParameterList_opt, FormalParameterList, FormalParameters;
+nonterminal      Node Block, BlockStatements_opt, BlockStatements, BlockStatement_opt, BlockStatement;
+nonterminal      Node LocalVariableDeclarationStatement, LocalVariableDeclaration;
+nonterminal      Node UnnanType, UnnanPrimitiveType, UnnanReferenceType, NumericType, IntegralType, FloatingPointType;
+nonterminal      Node Identifier;
+nonterminal      Node LastFormalParameter;
+nonterminal      Node Literal;
+nonterminal      Node PrimaryNoNewArray, Primary, PostfixExpression, UnaryExpressionNotPlusMinus;
+nonterminal      Node UnaryExpression, MultiplicativeExpression, AdditiveExpression, ShiftExpression;
+nonterminal      Node RelationalExpression, EqualityExpression, AndExpression, ExclusiveOrExpression;
+nonterminal      Node InclusiveOrExpression, ConditionalAndExpression, ConditionalOrExpression;
+nonterminal      Node ConditionalExpression, AssignmentExpression, Expression;
+nonterminal      Node PackageDelcaration_opt, PackageDelcaration, ImportDeclaration_opt, ImportDeclaration;
+nonterminal      Node TypeParameters_opt, TypeParameters, Superclass_opt, Superclass, Superinterfaces_opt, Superinterfaces;
+nonterminal      Node Throws_opt, Throws, VariableModifier_opt, VariableModifier, TypeArguments_opt, TypeArguments;
+nonterminal      Node PreIncrementExpression, PreDecrementExpression;
+nonterminal      Node ExpressionName, PostIncrementExpression, PostDecrementExpression, ArrayCreationExpression;
+nonterminal		 Node CastExpression, AmbiguousName;
 
 /* Compilation related grammar */
 
@@ -76,7 +83,11 @@ TypeDeclaration             ::= ClassDeclaration;
 
 ClassDeclaration            ::= NormalClassDeclaration;
 
-NormalClassDeclaration      ::= ClassModifier_opt CLASS Identifier TypeParameters_opt Superclass_opt Superinterfaces_opt ClassBody;
+NormalClassDeclaration      ::= ClassModifier_opt CLASS Identifier:i TypeParameters_opt Superclass_opt Superinterfaces_opt ClassBody:b
+                                {: 
+                                    RESULT = new ClassNode(i, new ClassBodyNode(b));
+                                    parser.root = RESULT;
+                                :};
 
 TypeParameters_opt           ::= TypeParameters
                             | /* empty */
@@ -96,11 +107,11 @@ ClassModifier_opt           ::= ClassModifier_opt ClassModifier
 
 ClassModifier               ::= PUBLIC | PROTECTED | PRIVATE | ABSTRACT | STATIC | FINAL | STRICTFP;
 
-ClassBody                   ::= LBRACE ClassBodyDeclaration_opt RBRACE;
+ClassBody                   ::= LBRACE ClassBodyDeclaration_opt:b RBRACE {: RESULT = b; :};
 
-Identifier                  ::= IDENTIFIER;
+Identifier                  ::= IDENTIFIER:i {: RESULT = new IdentifierNode(i.toString()); :};
 
-ClassBodyDeclaration_opt    ::= ClassBodyDeclaration_opt ClassBodyDeclaration
+ClassBodyDeclaration_opt    ::= ClassBodyDeclaration_opt ClassBodyDeclaration:d {: RESULT = new DummyNode("temporary ends here..."); :}
                             | /* empty */
                             ;
 
