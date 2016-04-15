@@ -67,6 +67,12 @@
             </executions>
             <configuration>
                <outputDirectory>src/main/java</outputDirectory>
+               <progress>true</progress>
+               <noSummary>false</noSummary>
+               <dumpGrammar>false</dumpGrammar>
+               <dumpStates>false</dumpStates>
+               <dumpTables>false</dumpTables>
+               <debug>true</debug>
             </configuration>
          </plugin>
       </plugins>

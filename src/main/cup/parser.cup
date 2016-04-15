@@ -54,7 +54,8 @@ nonterminal      TypeParameters_opt, TypeParameters, Superclass_opt, Superclass,
 nonterminal      Throws_opt, Throws, VariableModifier_opt, VariableModifier, TypeArguments_opt, TypeArguments;
 nonterminal      PreIncrementExpression, PreDecrementExpression;
 nonterminal      ExpressionName, PostIncrementExpression, PostDecrementExpression, ArrayCreationExpression;
-nonterminal		 CastExpression, AmbiguousName;
+nonterminal      CastExpression, AmbiguousName;
+nonterminal      MethodInvocation, TypeName, PackageOrTypeName, ArgumentList_opt, ArgumentList, Expression_opt;
 
 /* Compilation related grammar */
 
@@ -175,8 +176,8 @@ ConditionalAndExpression    ::= InclusiveOrExpression;
 InclusiveOrExpression       ::= ExclusiveOrExpression;
 
 ExclusiveOrExpression       ::= AndExpression
-							| ExclusiveOrExpression OP_XOR AndExpression
-							;
+                            | ExclusiveOrExpression OP_XOR AndExpression
+                            ;
 
 AndExpression               ::= EqualityExpression
                             | AndExpression OP_LOGIC_AND EqualityExpression;
@@ -193,9 +194,9 @@ ShiftExpression             ::= AdditiveExpression
                             | ShiftExpression OP_UNSIGN_R_SHIFT AdditiveExpression;
 
 AdditiveExpression          ::= MultiplicativeExpression
-							| AdditiveExpression OP_PLUS MultiplicativeExpression
-							| AdditiveExpression OP_MINUS MultiplicativeExpression
-							;
+                            | AdditiveExpression OP_PLUS MultiplicativeExpression
+                            | AdditiveExpression OP_MINUS MultiplicativeExpression
+                            ;
 
 MultiplicativeExpression    ::= UnaryExpression
                             |MultiplicativeExpression OP_MULTIPLY UnaryExpression
@@ -209,9 +210,9 @@ UnaryExpression             ::= PreIncrementExpression
                             | UnaryExpressionNotPlusMinus;
 
 UnaryExpressionNotPlusMinus ::= PostfixExpression
-							| OP_UNARY UnaryExpression
-							| OP_NOT_EQ UnaryExpression
-							| CastExpression;
+                            | OP_UNARY UnaryExpression
+                            | OP_NOT_EQ UnaryExpression
+                            | CastExpression;
 
 PostfixExpression           ::= Primary
                             | ExpressionName
@@ -231,7 +232,9 @@ AmbiguousName               ::= Identifier
                             | AmbiguousName DOT Identifier
                             ;
 
-PrimaryNoNewArray           ::= Literal;
+PrimaryNoNewArray           ::= Literal
+                            | MethodInvocation
+                            ;
 
 Literal                     ::= INTEGER_LITERAL;
 
@@ -306,5 +309,12 @@ IntegralType                ::= INT
 
 FloatingPointType           ::= DOUBLE
                             | FLOAT
+                            ;
+
+/* Method invocation related */
+MethodInvocation            ::= TypeName DOT TypeArguments_opt Identifier LPAREN ArgumentList_opt RPAREN;
+
+TypeName                    ::= Identifier
+                            | PackageOrTypeName DOT Identifier
                             ;
 
