@@ -1,5 +1,7 @@
-package org.ifn660.jflexer.ast;
-
-public abstract class Expression extends Node {
-
+public class Expression extends VariableInitialiser {
+	private IntegerLiteral intlit;
+	
+	public Expression  (IntegerLiteral intlit){
+		this.intlit = intlit;
+	}
 }
