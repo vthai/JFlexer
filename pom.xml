@@ -71,7 +71,8 @@
                <noSummary>false</noSummary>
                <dumpGrammar>false</dumpGrammar>
                <dumpStates>false</dumpStates>
-               <dumpTables>false</dumpTables>
+               <dumpTables>true</dumpTables>
+               <expectedConflicts>1</expectedConflicts>
                <debug>true</debug>
             </configuration>
          </plugin>
