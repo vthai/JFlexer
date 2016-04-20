@@ -55,7 +55,11 @@ nonterminal      MethodDeclaration MethodDeclaration, ClassMemberDeclaration;
 nonterminal      List<String> MethodModifier_opt;
 nonterminal      String MethodModifier;
 nonterminal      Node[] MethodHeader;
-nonterminal      MethodBody, MethodDeclarator, FormalParameterList_opt, FormalParameterList, FormalParameters;
+nonterminal      MethodBody; 
+nonterminal      Node MethodDeclarator; 
+nonterminal      FormalParameterList_opt;
+nonterminal      Node FormalParameterList;
+nonterminal      FormalParameters;
 nonterminal      Block, BlockStatements_opt, BlockStatements, BlockStatement_opt, BlockStatement;
 nonterminal      LocalVariableDeclarationStatement, LocalVariableDeclaration;
 nonterminal      UnnanType, UnnanPrimitiveType, UnnanReferenceType, NumericType, IntegralType, FloatingPointType;
@@ -164,7 +168,8 @@ MethodHeader                ::= Result:i MethodDeclarator:md Throws_opt
                             {:
                                 RESULT = new Node[2];
                                 RESULT[0] = new Result(i);
-                                RESULT[1] = null; /* TODO expand in the future */
+                                RESULT[1] = null; 
+                                RESULT[2] = new MethodDeclarator(md);
                             :};
 
 Throws_opt                  ::= Throws
@@ -173,7 +178,11 @@ Throws_opt                  ::= Throws
 
 Result                      ::= VOID:v {: RESULT = new NamedType(v); :};
 
-MethodDeclarator            ::= Identifier LPAREN FormalParameterList_opt RPAREN;
+MethodDeclarator            ::= Identifier LPAREN FormalParameterList_opt:fparaml
+                            {: 
+                            RESULT = new FormalParameterList(fparaml);
+                            :} 
+                            RPAREN;
 
 FormalParameterList_opt     ::= FormalParameterList
                             | /* empty */
