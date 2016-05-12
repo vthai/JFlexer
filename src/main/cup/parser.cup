@@ -348,6 +348,10 @@ ConditionalAndExpression    ::= InclusiveOrExpression:ioe
                             {:
                                 RESULT = ioe;
                             :}
+                            | ConditionalAndExpression:cae OP_LOGIC_AND:ola InclusiveOrExpression:ioe
+                            {:
+                                RESULT = new BinaryExpression(cae, ioe, new BinaryOperator(ola));
+                            :}
                             ;
 
 InclusiveOrExpression       ::= ExclusiveOrExpression:eoe
