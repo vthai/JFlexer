@@ -338,6 +338,10 @@ ConditionalOrExpression     ::= ConditionalAndExpression:cae
                             {:
                                 RESULT = cae;
                             :}
+                            | ConditionalOrExpression:coe OP_LOGIC_OR:olo ConditionalAndExpression:cae
+                            {:
+                                RESULT = new BinaryExpression(coe, cae, new BinaryOperator(olo));
+                            :}
                             ;
 
 ConditionalAndExpression    ::= InclusiveOrExpression:ioe
