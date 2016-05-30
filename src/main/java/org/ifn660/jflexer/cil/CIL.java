@@ -34,6 +34,10 @@ public class CIL {
         case "*":
                 cilOperator = "mul";
                 break;
+                
+        case "/":
+        	    cilOperator = "div";
+        	    break;
         // more operators mapping here
         }
         

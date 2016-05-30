@@ -11,7 +11,9 @@
       ldc.i4   42
       stloc.0
       // Expression statement x=local[0], y=local[1], y = x + 4;
+      ldc.i4   3
       ldc.i4   31
+      mul
       ldloc.0
       add
       stloc.1

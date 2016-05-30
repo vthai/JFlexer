@@ -5,7 +5,7 @@ public class Example {
     public static void main(String[] args) {
         int x = 42;
         int y;
-        y = x + 31;
+        y = x + 31 * 3;
         System.out1.println(y);
     }
 }
