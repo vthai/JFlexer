@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .assembly extern mscorlib{}
 .assembly extern JDK{}
 .assembly Example{}

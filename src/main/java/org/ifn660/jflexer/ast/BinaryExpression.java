@@ -26,14 +26,10 @@ public class BinaryExpression extends Expression {
     }
     
     @Override
-    public void codeGeneration(Path path, CILOption cilOption) throws IOException {
-        rightHandSide.codeGeneration(path, cilOption);
+    public void codeGeneration(Path path, CILOption cilOption) throws IOException {      
         leftHandSide.codeGeneration(path, cilOption);
+        rightHandSide.codeGeneration(path, cilOption);
         
-        StringBuilder msg = new StringBuilder(CIL.TWO_IDENT);
-        String cilOperator = CIL.getBinaryOperator(operator);
-        msg.append(cilOperator + "\r\n");
-        
-        Files.write(path, msg.toString().getBytes(), StandardOpenOption.APPEND);
+        emit(path, CIL.TWO_IDENT + CIL.getBinaryOperator(operator) + "\r\n");
     }
 }
