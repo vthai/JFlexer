@@ -434,7 +434,10 @@ AdditiveExpression          ::= MultiplicativeExpression:me
 							{:
 							    RESULT = new BinaryExpression(lhs, rhs, new BinaryOperator (op));
 							:}
-							| AdditiveExpression OP_MINUS MultiplicativeExpression
+							| AdditiveExpression:lhs OP_MINUS:om MultiplicativeExpression:rhs
+							{:
+							    RESULT = new BinaryExpression(lhs, rhs, new BinaryOperator (om));
+							:}
 							;
 
 MultiplicativeExpression    ::= UnaryExpression:ue

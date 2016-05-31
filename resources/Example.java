@@ -1,11 +1,9 @@
-
-
 public class Example {
-    //private int z;//zyx:here z is not static,So we cannot use z in method body.
     public static void main(String[] args) {
         int x = 42;
-        int y;
-        y = x + 31;
-        System.out1.println(y);
+        int y = 40;
+        int z;
+        z = x - y;
+        System.out1.println(z);
     }
 }
