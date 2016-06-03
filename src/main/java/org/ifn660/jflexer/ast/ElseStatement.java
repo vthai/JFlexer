@@ -14,13 +14,14 @@ public class ElseStatement extends Statement{
         elseStatement.resolveNames(scope);
     }
     @Override
-    public void passVariables(String variable)  {
+    public String passVariables(String variable)  {
         
         
             elseStatement.passVariables(variable);
             //System.out.println(variable);
            // System.out.println("&&&&&&");
         //methodBody.passVariables(variable);
+            return variable;
         
      }
 
