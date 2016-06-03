@@ -21,10 +21,8 @@ public class MethodBody extends Node {
 
     @Override
     public void resolveNames(LexicalScope scope) {
-        // the scope from whom invoked this method is the parent scope
-        this.scope.parentScope = scope;//here the parent scope is the creat by the classbody. with one hashmap. so we can call the parentScope to 
+        this.scope.parentScope = scope;
         
-        //we can call --- this.scope.parentScope.sympaltable  OR  the this.scope.symbolTable
 
         // add all declaration statement to the symbol table of method scope
         for (Statement statement : statements) {
@@ -33,10 +31,7 @@ public class MethodBody extends Node {
             // LocalVariableDeclarationStatement and FieldDeclaration
             if (statement instanceof Declaration) {
                 Declaration declaration = (Declaration) statement;
-                // if this is true, then record that declaration in the symbol
-                // table
                 this.scope.symbolTable.put(declaration.getName(), declaration);
-                //zyx here continus to add the has code into this scope 
                 
             }
         }

@@ -60,7 +60,6 @@ public class IdentifierExpression extends Expression {
         System.out.println(className);
         System.out.println("&&&&&&****&&&&&");
         return variable;
-
      }
     
     @Override
@@ -72,10 +71,7 @@ public class IdentifierExpression extends Expression {
         //System.out.println("*************");
        
         if (cilOption == CILOption.LEFT_HAND_SIDE) {
-            //here should identify if the variable is files.
-            //now we can just only implement the locay 
-//            System.out.println(identifier.value);
-//            System.out.println(coGe_scop.iterator().next());
+;
             
           for (Object key: getParentNode.keySet())
           {
