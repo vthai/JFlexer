@@ -10,22 +10,22 @@
           [1] int32 y)
       ldc.i4   42
       stloc.0
-      ldc.i4   31
       ldloc.0
+      ldc.i4   31
       add
       stloc.1
       ldsfld          class [JDK]java.lang.out1 [JDK]java.lang.System::out1
       ldloc.1
       callvirt          instance void [JDK]java.lang.out1::println(int32)
-      ldc.i4   42
       ldloc.0
+      ldc.i4   10
       cqt
       ceq
       stloc.2
       ldloc.2
       brtrue      IL_0000,
-                ldc.i4   1
-      ldloc.0
+                ldloc.0
+      ldc.i4   1
       add
       stloc.0
          

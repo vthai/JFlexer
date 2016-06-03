@@ -28,6 +28,8 @@ public class CIL {
     
     public static final String BRTRUE = "brtrue";
     
+    public static final String BR = "br";
+    
     public static final String CEQ = "ceq";
     
     public static String getBinaryOperator(BinaryOperator operator) {
@@ -42,6 +44,9 @@ public class CIL {
                 break;
         case ">":
                 cilOperator = "cqt";
+                break;
+        case "<":
+                cilOperator = "clt";
                 break;
         // more operators mapping here
         }

@@ -7,7 +7,7 @@ public class Example {
         int y;
         y = x + 31;
         System.out1.println(y);
-        if (x>42) {
+        if (x>10) {
             x=x+1;
         }
     }

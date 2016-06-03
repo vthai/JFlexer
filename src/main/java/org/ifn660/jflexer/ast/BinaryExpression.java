@@ -27,8 +27,9 @@ public class BinaryExpression extends Expression {
     
     @Override
     public void codeGeneration(Path path, CILOption cilOption) throws IOException {
-        rightHandSide.codeGeneration(path, cilOption);
+        
         leftHandSide.codeGeneration(path, cilOption);
+        rightHandSide.codeGeneration(path, cilOption);
         
         StringBuilder msg = new StringBuilder(CIL.TWO_IDENT);
         String cilOperator = CIL.getBinaryOperator(operator);
