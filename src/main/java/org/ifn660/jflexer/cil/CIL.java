@@ -24,6 +24,12 @@ public class CIL {
     
     public static final String THREE_IDENT = "          ";
     
+    public static final String LABLE = "IL_";
+    
+    public static final String BRTRUE = "brtrue";
+    
+    public static final String CEQ = "ceq";
+    
     public static String getBinaryOperator(BinaryOperator operator) {
         String cilOperator = "";
         
@@ -33,6 +39,9 @@ public class CIL {
                 break;
         case "*":
                 cilOperator = "mul";
+                break;
+        case ">":
+                cilOperator = "cqt";
                 break;
         // more operators mapping here
         }

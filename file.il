@@ -10,7 +10,6 @@
           [1] int32 y)
       ldc.i4   42
       stloc.0
-      // Expression statement x=local[0], y=local[1], y = x + 4;
       ldc.i4   31
       ldloc.0
       add
@@ -18,6 +17,18 @@
       ldsfld          class [JDK]java.lang.out1 [JDK]java.lang.System::out1
       ldloc.1
       callvirt          instance void [JDK]java.lang.out1::println(int32)
-      ret
+      ldc.i4   42
+      ldloc.0
+      cqt
+      ceq
+      stloc.2
+      ldloc.2
+      brtrue      IL_0000,
+                ldc.i4   1
+      ldloc.0
+      add
+      stloc.0
+         
+      IL_0000:       ret
    }
 }

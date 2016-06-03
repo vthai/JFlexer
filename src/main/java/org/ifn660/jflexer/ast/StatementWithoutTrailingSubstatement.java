@@ -1,6 +1,11 @@
 package org.ifn660.jflexer.ast;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
+
+import org.ifn660.jflexer.cil.CIL;
+import org.ifn660.jflexer.cil.CILOption;
 
 public class StatementWithoutTrailingSubstatement extends Statement {
     private List<Statement> statements;
@@ -34,4 +39,13 @@ public class StatementWithoutTrailingSubstatement extends Statement {
         }
     }
     
+    @Override
+    public void codeGeneration(Path path, CILOption cilOption) throws IOException {
+        for (Statement statement : statements) {
+            //if (Declaration.class.isInstance(statement)){              
+                   emit(path, ",\r\n" + CIL.THREE_IDENT);
+                   statement.codeGeneration(path, CILOption.DECLARE);
+              // }
+        }
+    }
 }

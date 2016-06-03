@@ -8,12 +8,11 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 
+import org.ifn660.jflexer.cil.CIL;
 import org.ifn660.jflexer.cil.CILOption;
 
 public abstract class Node {
-
     public static int INDEX_COUNT = 0;
-
     public void resolveNames(LexicalScope scope) {
     }
 
@@ -109,7 +108,9 @@ public abstract class Node {
         }
     }
     
-    public void emit(Path path, String str) throws IOException{
-    	Files.write(path, str.getBytes(), StandardOpenOption.APPEND);
+    public void emit(Path path, String str) throws IOException {
+        Files.write(path, str.getBytes(), StandardOpenOption.APPEND);
     }
+
+
 }
